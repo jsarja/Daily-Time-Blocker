@@ -19,6 +19,7 @@ namespace Planner.Application.TodoManagement.TodoActions.ReadActions
     
     public class GetDailyTodoItemBlocksSearchArgs
     {
+        public DateTime? Date { get; set; }
         public DateTime? TimeIntervalStart { get; set; }
         public DateTime? TimeIntervalEnd { get; set; }
         public bool? IsCompleted { get; set; }
