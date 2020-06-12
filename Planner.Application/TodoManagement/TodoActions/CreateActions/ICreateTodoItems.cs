@@ -34,7 +34,7 @@ namespace Planner.Application.TodoManagement.TodoActions.CreateActions
         public int OwnerId { get; set; }
     }
     
-    public interface ICreateTodoItems
+    public interface ICreateActions
     {
         public TodoItemDto CreateTodoItem(CreateTodoItemArgs itemData);
         public DailyTodoItemDto CreateDailyTodoItem(CreateDailyTodoItemArgs dailyItemData);
