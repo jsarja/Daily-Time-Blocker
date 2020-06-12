@@ -4,11 +4,11 @@ using Planner.Application.TodoManagement.Dtos;
 
 namespace Planner.Application.TodoManagement.TodoActions.ReadActions
 {
-    public class ReadActionsPersistent : IReadActions
+    public class ReadActions : IReadActions
     {
         private readonly IApplicationDbContext m_dataAccessClient;
         
-        public ReadActionsPersistent(IApplicationDbContext dataAccessClient)
+        public ReadActions(IApplicationDbContext dataAccessClient)
         {
             m_dataAccessClient = dataAccessClient;
         }
