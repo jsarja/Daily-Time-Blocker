@@ -3,11 +3,11 @@ using Planner.Application.TodoManagement.Dtos;
 
 namespace Planner.Application.TodoManagement.TodoActions.UpdateActions
 {
-    public class UpdateActionsPersistent : IUpdateActions
+    public class UpdateActions : IUpdateActions
     {
         private readonly IApplicationDbContext m_dataAccessClient;
         
-        public UpdateActionsPersistent(IApplicationDbContext dataAccessClient)
+        public UpdateActions(IApplicationDbContext dataAccessClient)
         {
             m_dataAccessClient = dataAccessClient;
         }

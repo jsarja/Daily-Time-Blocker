@@ -4,11 +4,11 @@ using Planner.Application.TodoManagement.Dtos;
 namespace Planner.Application.TodoManagement.TodoActions.CreateActions
 {
 
-    public class CreateTodoItemsPersistent : ICreateTodoItems
+    public class CreateActions : ICreateActions
     {
         private readonly IApplicationDbContext m_dataAccessClient;
         
-        public CreateTodoItemsPersistent(IApplicationDbContext dataAccessClient)
+        public CreateActions(IApplicationDbContext dataAccessClient)
         {
             m_dataAccessClient = dataAccessClient;
         }
