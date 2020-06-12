@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.Infrastructure", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.NUnitTests", "Planner.NUnitTests\Planner.NUnitTests.csproj", "{ED4F6DEC-2D0D-4B54-8BDE-82D7470B8287}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMVC", "WebMVC\WebMVC.csproj", "{BCC49B4D-DB5E-43A3-B9C1-8EF29D7E243C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.WebMVC", "Planner.WebMVC\Planner.WebMVC.csproj", "{BCC49B4D-DB5E-43A3-B9C1-8EF29D7E243C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

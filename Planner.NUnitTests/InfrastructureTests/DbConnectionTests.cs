@@ -11,7 +11,7 @@ namespace Planner.NUnitTests.InfrastructureTests
     [Explicit]
     public class DbContextTests
     {
-        [TestCase("Planner.BlazorServer/appsettings.json", "SQLServer")]
+        [TestCase("Planner.WebMVC/appsettings.Development.json", "DbContext")]
         public void TestPlannerDbContextConnectionWithUseSqlServer(string settingsFile, string connectionStrKey)
         {
             // Create new PlannerDbContext object using the connection string from the settings file.
