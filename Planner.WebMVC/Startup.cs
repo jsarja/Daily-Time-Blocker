@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Planner.Application.TodoManagement.TodoActions.CreateActions;
+using Planner.Application.TodoManagement.TodoActions.DeleteActions;
+using Planner.Application.TodoManagement.TodoActions.ReadActions;
+using Planner.Application.TodoManagement.TodoActions.UpdateActions;
 
 namespace Planner.WebMVC
 {
@@ -23,7 +27,11 @@ namespace Planner.WebMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            
+
+            services.AddTransient<ICreateActions, CreateActions>();
+            services.AddTransient<IReadActions, ReadActions>();
+            services.AddTransient<IUpdateActions, UpdateActions>();
+            services.AddTransient<IDeleteActions, DeleteActions>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

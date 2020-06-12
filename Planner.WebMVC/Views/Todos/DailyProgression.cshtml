@@ -1,0 +1,33 @@
+@using Microsoft.EntityFrameworkCore.Query
+@model IEnumerable<DailyTodoItemBlockDto>
+
+@{
+    ViewBag.Title = "Today";
+}
+
+<h2>Today</h2>
+@foreach (var todoBlock in Model)
+{
+    <div class="card">
+        <div class="card-header">
+            @todoBlock.DTodoItem.TodoInfo.Title
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                @todoBlock.DTodoItem.TodoInfo.Title <br/>
+                @todoBlock.DTodoItem.TodoInfo.Description <br/>
+                @todoBlock.DTodoItem.TodoDate <br/>
+                @todoBlock.StartTime -
+                @todoBlock.EndTime <br/>
+                
+                Done: @todoBlock.IsCompleted <br/>
+            </div>
+        </div>
+        @if (!todoBlock.IsCompleted)
+        {
+            <div class="card-footer">
+                <button>Mark done.</button>
+            </div>
+        }
+    </div>
+}
