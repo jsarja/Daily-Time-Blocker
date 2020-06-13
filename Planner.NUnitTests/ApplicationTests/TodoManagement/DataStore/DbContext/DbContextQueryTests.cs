@@ -75,8 +75,8 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore.DbContext
                     m_dbContext.TodoItemCategoryJoin.Add(
                         new TodoItemCategoryJoinTable
                         {
-                            TodoItemId = i.TodoItemId,
-                            CategoryId = c.TodoItemCategoryId
+                            TodoItem = i,
+                            Category = c
                         });
                 }
             }

@@ -48,7 +48,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreInsertion
             
             var join = new TodoItemCategoryJoinTable
             {
-                Item = item,
+                TodoItem = item,
                 Category = category,
             };
             
