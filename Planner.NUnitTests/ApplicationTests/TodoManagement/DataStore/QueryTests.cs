@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -66,7 +67,6 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         [Test]
         public async Task TestTodoItemQueryWithMultipleArgs()
         {
-            // Set multiple search terms.
             var singleTodoItem = (await m_queryClient.TodoItemsQueryAsync(
                 new TodoItemsSearchArgs
                 {
@@ -88,7 +88,6 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         [Test]
         public async Task TestTodoItemQueryWithoutArgs()
         {
-            // Set no search terms.
             var todoItems = await m_queryClient.TodoItemsQueryAsync(new TodoItemsSearchArgs());
             Assert.That(todoItems, Has.Count.EqualTo(5));
         }
@@ -116,10 +115,65 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         }
         
         [Test]
-        public async Task TestTodoItemQueryWithNullArgs()
+        public void TestTodoItemQueryWithNullArgs()
         {
-            // Set no search terms.
             Assert.That(async () => await m_queryClient.TodoItemsQueryAsync(null),
+                Throws.ArgumentNullException);
+        }
+        
+        [Test]
+        public async Task TestDailyTodoItemQueryWithId()
+        {
+            var dTodo1 = await m_queryClient.DailyTodoItemQueryAsync(1);
+            Assert.That(dTodo1, Is.Not.Null);
+
+            var propertyValues = (dTodo1.TodoDate, dTodo1.TimeUsedForTodo, 
+                dTodo1.TimeReservedForTodo);
+            var expectedPropertyValues = (new DateTime(2020, 6, 9),
+                new TimeSpan(0, 45, 0), new TimeSpan(0, 45, 0));
+            Assert.That(propertyValues, Is.EqualTo(expectedPropertyValues));
+
+            for (var i = 2; i < 7; i++)
+            {
+                var dTodo = await m_queryClient.DailyTodoItemQueryAsync(i);
+                Assert.That(dTodo, Is.Not.Null);
+            }
+        }
+        
+        [Test]
+        public async Task TestDailyTodoItemQueryWithDate()
+        {
+            var dTodoItems =
+                await m_queryClient.DailyTodoItemsQueryAsync(new GetDailyTodoItemsSearchArgs
+                {
+                    Date = new DateTime(2020, 6, 9)
+                });
+            Assert.That(dTodoItems, Has.Count.EqualTo(4));
+        }
+
+        [Test]
+        public async Task TestDailyTodoItemQueryWithoutArgs()
+        {
+            var dTodoItems = await m_queryClient.DailyTodoItemsQueryAsync(
+                new GetDailyTodoItemsSearchArgs());
+            Assert.That(dTodoItems, Has.Count.EqualTo(6));
+        }
+
+        [Test]
+        public async Task TestDailyTodoItemQueryWithNoResults()
+        {
+            var dTodo1 = await m_queryClient.DailyTodoItemQueryAsync(9);
+            Assert.That(dTodo1, Is.Null);
+            
+            var todoItems = await m_queryClient.DailyTodoItemsQueryAsync(
+                new GetDailyTodoItemsSearchArgs {Date = new DateTime(2020, 6, 30)});
+            Assert.That(todoItems, Has.Count.EqualTo(0));
+        }
+        
+        [Test]
+        public void TestDailyTodoItemQueryWithNullArgs()
+        {
+            Assert.That(async () => await m_queryClient.DailyTodoItemsQueryAsync(null),
                 Throws.ArgumentNullException);
         }
     }

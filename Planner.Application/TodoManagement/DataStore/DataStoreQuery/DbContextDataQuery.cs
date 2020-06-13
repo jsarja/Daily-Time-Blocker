@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Planner.Application.Common.Interfaces;
@@ -61,6 +58,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
                                                             || i.Description.Contains(searchArgs.StringFieldsContains))
             ).ToListAsync();
             
+            // TODO map categories.
+            
             return results;
         }
 
@@ -71,6 +70,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public async Task<IEnumerable<DailyTodoItem>> DailyTodoItemsQueryAsync(GetDailyTodoItemsSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var results = await m_dbContext.DailyTodoItems.Where(i =>
                 searchArgs.Date == null || searchArgs.Date.Equals(i.TodoDate)).ToListAsync();
 
@@ -84,6 +85,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public async Task<IEnumerable<DailyTodoItemBlock>> DailyTodoItemBlocksQueryAsync(GetDailyTodoItemBlocksSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var results = await m_dbContext.DailyTodoItemBlocks.Where(b => 
                 (searchArgs.TimeIntervalStart == null || searchArgs.TimeIntervalStart == b.StartTime)
                 
@@ -125,6 +128,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         public async Task<IEnumerable<TodoItemCategory>> 
             TodoItemCategoriesQueryAsync(TodoItemCategoriesSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var results = await m_dbContext.TodoItemCategories.Where(c => 
                 (searchArgs.TodoItemId == null 
                  || c.TodoItemSet.Any(i => searchArgs.TodoItemId == i.TodoItemId))
@@ -133,6 +138,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
                                                             || c.Description.Contains(searchArgs.StringFieldsContains))
             ).ToListAsync();
 
+            // TODO map todoItems.
             return results;
         }
     }

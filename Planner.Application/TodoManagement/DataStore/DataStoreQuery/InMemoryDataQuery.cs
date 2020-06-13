@@ -32,6 +32,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         public Task<IEnumerable<TodoItem>> TodoItemsQueryAsync(TodoItemsSearchArgs searchArgs)
         {
             var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var items = m_dataRepo.TodoItems.FindAll(i => 
                 (searchArgs.CategoryId == null 
                     || i.CategorySet.Any(c => searchArgs.CategoryId == c.TodoItemCategoryId))
@@ -53,6 +54,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public Task<IEnumerable<DailyTodoItem>> DailyTodoItemsQueryAsync(GetDailyTodoItemsSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var items = m_dataRepo.DailyTodoItems.FindAll(i => 
                 (searchArgs.Date == null || searchArgs.Date.Equals(i.TodoDate)));
 
@@ -67,6 +70,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public Task<IEnumerable<DailyTodoItemBlock>> DailyTodoItemBlocksQueryAsync(GetDailyTodoItemBlocksSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var blocks = m_dataRepo.DailyTodoItemBlocks.FindAll(b => 
                 (searchArgs.TimeIntervalStart == null || searchArgs.TimeIntervalStart == b.StartTime)
                 
@@ -86,6 +91,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public Task<IEnumerable<TodoItemCategory>> TodoItemCategoriesQueryAsync(TodoItemCategoriesSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
+            
             var categories = m_dataRepo.TodoItemCategories.FindAll(c => 
                 (searchArgs.TodoItemId == null 
                     || c.TodoItemSet.Any(i => searchArgs.TodoItemId == i.TodoItemId))
