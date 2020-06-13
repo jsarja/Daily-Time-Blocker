@@ -86,6 +86,14 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         }
         
         [Test]
+        public async Task TestTodoItemQueryWithoutArgs()
+        {
+            // Set no search terms.
+            var todoItems = await m_queryClient.TodoItemsQueryAsync(new TodoItemsSearchArgs());
+            Assert.That(todoItems, Has.Count.EqualTo(5));
+        }
+
+        [Test]
         public async Task TestTodoItemQueryWithNoResults()
         {
             var todo1 = await m_queryClient.TodoItemQueryAsync(9);
@@ -105,6 +113,14 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
                     StringFieldsContains = "5"
                 });
             Assert.That(todoItems, Has.Count.EqualTo(0));
+        }
+        
+        [Test]
+        public async Task TestTodoItemQueryWithNullArgs()
+        {
+            // Set no search terms.
+            Assert.That(async () => await m_queryClient.TodoItemsQueryAsync(null),
+                Throws.ArgumentNullException);
         }
     }
 }

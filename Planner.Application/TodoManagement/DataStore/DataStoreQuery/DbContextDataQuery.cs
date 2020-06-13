@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -47,6 +48,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public async Task<IEnumerable<TodoItem>> TodoItemsQueryAsync(TodoItemsSearchArgs searchArgs)
         {
+            var _ = searchArgs != null ? "" : throw new ArgumentNullException();
 
             var results = await m_dbContext.TodoItems.Where(i =>
                 (searchArgs.CategoryId == null || m_dbContext.TodoItemCategoryJoin
