@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,29 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public async Task<TodoItem> TodoItemQueryAsync(int id)
         {
-            return await m_dbContext.TodoItems.FindAsync(id);
+            var item = await m_dbContext.TodoItems.FindAsync(id);
+            
+            if (item == null)
+            {
+                return null;
+            }
+            
+            item.CategorySet.Clear();
+            
+            var categoryIdList = await m_dbContext.TodoItemCategoryJoin
+                .Where(j => j.TodoItemId == id)
+                .Select(j => j.CategoryId)
+                .ToListAsync();
+
+            var categories = await m_dbContext.TodoItemCategories.Where(i =>
+                categoryIdList.Contains(i.TodoItemCategoryId)).ToListAsync();
+            
+            foreach (var category in categories)
+            {
+                item.CategorySet.Add(category);
+            }
+
+            return item;
         }
 
         public async Task<IEnumerable<TodoItem>> TodoItemsQueryAsync(TodoItemsSearchArgs searchArgs)
@@ -74,18 +97,25 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         {
             var category = await m_dbContext.TodoItemCategories.FindAsync(id);
             
-            // var itemIdList = await m_dbContext.TodoItemCategoryJoin
-            //     .Where(j => j.CategoryId == id)
-            //     .Select(j => j.TodoItemId)
-            //     .ToListAsync();
+            if (category == null)
+            {
+                return null;
+            }
+            
+            category.TodoItemSet.Clear();
+            
+            var itemIdList = await m_dbContext.TodoItemCategoryJoin
+                .Where(j => j.CategoryId == id)
+                .Select(j => j.TodoItemId)
+                .ToListAsync();
 
-            // var items = await m_dbContext.TodoItems.Where(i =>
-            //     itemIdList.Contains(i.TodoItemId)).ToListAsync();
-            //
-            // foreach (var item in items)
-            // {
-            //     category.TodoCollection.Add(item);
-            // }
+            var items = await m_dbContext.TodoItems.Where(i =>
+                itemIdList.Contains(i.TodoItemId)).ToListAsync();
+            
+            foreach (var item in items)
+            {
+                category.TodoItemSet.Add(item);
+            }
             
             return category;
         }
