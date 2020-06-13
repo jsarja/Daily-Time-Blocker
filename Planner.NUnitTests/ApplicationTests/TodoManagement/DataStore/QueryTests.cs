@@ -176,5 +176,113 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             Assert.That(async () => await m_queryClient.DailyTodoItemsQueryAsync(null),
                 Throws.ArgumentNullException);
         }
+        
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithId()
+        {
+            var block1 = await m_queryClient.DailyTodoItemBlockQueryAsync(1);
+            Assert.That(block1, Is.Not.Null);
+
+            var propertyValues = (block1.StartTime, block1.EndTime, 
+                block1.IsCompleted);
+            var expectedPropertyValues = ( new DateTime(2020, 6, 9, 9, 0, 0),
+                new DateTime(2020, 6, 9, 9, 45, 0),  true);
+            Assert.That(propertyValues, Is.EqualTo(expectedPropertyValues));
+
+            for (var i = 2; i < 8; i++)
+            {
+                var dTodo = await m_queryClient.DailyTodoItemBlockQueryAsync(i);
+                Assert.That(dTodo, Is.Not.Null);
+            }
+        }
+        
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithDate()
+        {
+            var blocks =
+                await m_queryClient.DailyTodoItemBlocksQueryAsync(new GetDailyTodoItemBlocksSearchArgs()
+                {
+                    Date = new DateTime(2020, 6, 9)
+                });
+            Assert.That(blocks, Has.Count.EqualTo(5));
+        }
+        
+        
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithTimeIntervals()
+        {
+            var blocks =
+                await m_queryClient.DailyTodoItemBlocksQueryAsync(new GetDailyTodoItemBlocksSearchArgs()
+                {
+                    TimeIntervalStart = new DateTime(2020, 6, 9, 14, 0, 0)
+                });
+            Assert.That(blocks, Has.Count.EqualTo(3));
+            
+            blocks =
+                await m_queryClient.DailyTodoItemBlocksQueryAsync(new GetDailyTodoItemBlocksSearchArgs()
+                {
+                    TimeIntervalEnd = new DateTime(2020, 6, 9, 13, 30, 0)
+                });
+            Assert.That(blocks, Has.Count.EqualTo(4));
+            
+            blocks =
+                await m_queryClient.DailyTodoItemBlocksQueryAsync(new GetDailyTodoItemBlocksSearchArgs()
+                {
+                    TimeIntervalStart = new DateTime(2020, 6, 9, 10, 30, 0),
+                    TimeIntervalEnd = new DateTime(2020, 6, 9, 14, 00, 0)
+                });
+            Assert.That(blocks, Has.Count.EqualTo(2));
+        }
+        
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithCompletion()
+        {
+            var blocks =
+                await m_queryClient.DailyTodoItemBlocksQueryAsync(new GetDailyTodoItemBlocksSearchArgs()
+                {
+                    IsCompleted = true
+                });
+            Assert.That(blocks, Has.Count.EqualTo(3));
+        }
+        
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithMultipleArgs()
+        {
+            var blocks =
+                (await m_queryClient.DailyTodoItemBlocksQueryAsync(new GetDailyTodoItemBlocksSearchArgs()
+                {
+                    Date = new DateTime(2020, 6, 9),
+                    TimeIntervalStart = new DateTime(2020, 6, 9, 14, 0, 0),
+                    IsCompleted = false
+                })).ToList();
+            Assert.That(blocks, Has.Count.EqualTo(1));
+            Assert.That(blocks.First().DailyTodoItemBlockId, Is.EqualTo(4));
+        }
+
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithoutArgs()
+        {
+            var blocks = await m_queryClient.DailyTodoItemBlocksQueryAsync(
+                new GetDailyTodoItemBlocksSearchArgs());
+            Assert.That(blocks, Has.Count.EqualTo(7));
+        }
+
+        [Test]
+        public async Task TestDailyTodoItemBlockQueryWithNoResults()
+        {
+            var block = await m_queryClient.DailyTodoItemBlockQueryAsync(9);
+            Assert.That(block, Is.Null);
+            
+            var blocks = await m_queryClient.DailyTodoItemsQueryAsync(
+                new GetDailyTodoItemsSearchArgs {Date = new DateTime(2020, 6, 30)});
+            Assert.That(blocks, Has.Count.EqualTo(0));
+        }
+        
+        [Test]
+        public void TestDailyTodoItemBlockQueryWithNullArgs()
+        {
+            Assert.That(async () => await m_queryClient.DailyTodoItemBlocksQueryAsync(null),
+                Throws.ArgumentNullException);
+        }
     }
 }

@@ -86,15 +86,21 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         public async Task<IEnumerable<DailyTodoItemBlock>> DailyTodoItemBlocksQueryAsync(GetDailyTodoItemBlocksSearchArgs searchArgs)
         {
             var _ = searchArgs != null ? "" : throw new ArgumentNullException();
-            
-            var results = await m_dbContext.DailyTodoItemBlocks.Where(b => 
-                (searchArgs.TimeIntervalStart == null || searchArgs.TimeIntervalStart == b.StartTime)
-                
-                && (searchArgs.TimeIntervalEnd == null || searchArgs.TimeIntervalEnd == b.EndTime)
-                
-                && (searchArgs.IsCompleted == null || searchArgs.IsCompleted == b.IsCompleted)
-            ).ToListAsync();
+            var results = await m_dbContext.DailyTodoItemBlocks
+                .Where(b =>
+                    (searchArgs.TimeIntervalStart == null || searchArgs.TimeIntervalStart <= b.StartTime)
 
+                    && (searchArgs.TimeIntervalEnd == null || searchArgs.TimeIntervalEnd > b.StartTime)
+
+                    && (searchArgs.IsCompleted == null || searchArgs.IsCompleted == b.IsCompleted)
+                )
+                .ToListAsync();
+
+                if (searchArgs.Date != null)
+                {
+                    results = results.Where(b => searchArgs.Date.Equals(b.DTodoItem.TodoDate)).ToList();
+                }
+            
             return results;
         }
 

@@ -73,9 +73,11 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
             var _ = searchArgs != null ? "" : throw new ArgumentNullException();
             
             var blocks = m_dataRepo.DailyTodoItemBlocks.FindAll(b => 
-                (searchArgs.TimeIntervalStart == null || searchArgs.TimeIntervalStart == b.StartTime)
+                (searchArgs.Date == null || searchArgs.Date == b.DTodoItem.TodoDate)
                 
-                && (searchArgs.TimeIntervalEnd == null || searchArgs.TimeIntervalEnd == b.EndTime)
+                && (searchArgs.TimeIntervalStart == null || searchArgs.TimeIntervalStart <= b.StartTime)
+                
+                && (searchArgs.TimeIntervalEnd == null || searchArgs.TimeIntervalEnd > b.StartTime)
                 
                 && (searchArgs.IsCompleted == null || searchArgs.IsCompleted == b.IsCompleted)
             );
