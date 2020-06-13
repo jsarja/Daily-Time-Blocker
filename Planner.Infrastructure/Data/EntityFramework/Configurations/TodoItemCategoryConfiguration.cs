@@ -15,7 +15,7 @@ namespace Planner.Infrastructure.Data.EntityFramework.Configurations
             builder.Property(d => d.OwnerId).IsRequired();
             
             // Ignore collection reference.
-            builder.Ignore(t => t.TodoCollection);
+            builder.Ignore(t => t.TodoItemSet);
         }
     }
 }

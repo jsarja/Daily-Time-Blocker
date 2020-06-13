@@ -23,7 +23,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreDeletion
                 return Task.CompletedTask;
             }
             
-            m_dataRepo.TodoItemCategories.ForEach(c =>  c.TodoCollection.Remove(todoItem));
+            m_dataRepo.TodoItemCategories.ForEach(c =>  c.TodoItemSet.Remove(todoItem));
             m_dataRepo.TodoItems.Remove(todoItem);
             return Task.CompletedTask;
         }
@@ -50,7 +50,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreDeletion
                 return Task.CompletedTask;
             }
            
-            m_dataRepo.TodoItems.ForEach(i =>  i.Categories.Remove(todoItemCategory));
+            m_dataRepo.TodoItems.ForEach(i =>  i.CategorySet.Remove(todoItemCategory));
             m_dataRepo.TodoItemCategories.Remove(todoItemCategory);
 
             return Task.CompletedTask;

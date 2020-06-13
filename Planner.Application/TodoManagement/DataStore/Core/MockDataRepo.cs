@@ -204,15 +204,15 @@ namespace Planner.Application.TodoManagement.DataStore.Core
                 OwnerId = 1
             });
             
-            TodoItemCategories[0].TodoCollection.Add(TodoItems[0]);
-            TodoItemCategories[0].TodoCollection.Add(TodoItems[2]);
-            TodoItems[0].Categories.Add(TodoItemCategories[0]);
-            TodoItems[2].Categories.Add(TodoItemCategories[0]);
+            TodoItemCategories[0].TodoItemSet.Add(TodoItems[0]);
+            TodoItemCategories[0].TodoItemSet.Add(TodoItems[2]);
+            TodoItems[0].CategorySet.Add(TodoItemCategories[0]);
+            TodoItems[2].CategorySet.Add(TodoItemCategories[0]);
             
-            TodoItemCategories[1].TodoCollection.Add(TodoItems[3]);
-            TodoItemCategories[1].TodoCollection.Add(TodoItems[4]);
-            TodoItems[3].Categories.Add(TodoItemCategories[1]);
-            TodoItems[4].Categories.Add(TodoItemCategories[1]);
+            TodoItemCategories[1].TodoItemSet.Add(TodoItems[3]);
+            TodoItemCategories[1].TodoItemSet.Add(TodoItems[4]);
+            TodoItems[3].CategorySet.Add(TodoItemCategories[1]);
+            TodoItems[4].CategorySet.Add(TodoItemCategories[1]);
         }
     }
 }

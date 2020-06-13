@@ -18,7 +18,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             Assert.That(todo1, Is.Not.Null);
 
             var propertyValues = (todo1.Title, todo1.OwnerId, todo1.Description,
-                todo1.IsUserFavorite, todo1.Categories.Count);
+                todo1.IsUserFavorite, todo1.CategorySet.Count);
             var expectedPropertyValues = ("TodoItem 1", 1, "This a todo item number 1. Hello", true, 1);
             Assert.That(propertyValues, Is.EqualTo(expectedPropertyValues));
 

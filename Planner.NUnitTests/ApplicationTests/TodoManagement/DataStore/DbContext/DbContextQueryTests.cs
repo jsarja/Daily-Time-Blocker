@@ -70,7 +70,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore.DbContext
 
             foreach (var c in mockData.TodoItemCategories)
             {
-                foreach (var i in c.TodoCollection)
+                foreach (var i in c.TodoItemSet)
                 {
                     m_dbContext.TodoItemCategoryJoin.Add(
                         new TodoItemCategoryJoinTable

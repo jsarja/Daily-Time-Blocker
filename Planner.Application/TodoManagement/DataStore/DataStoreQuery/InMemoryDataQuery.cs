@@ -33,7 +33,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         {
             var items = m_dataRepo.TodoItems.FindAll(i => 
                 (searchArgs.CategoryId == null 
-                    || i.Categories.Any(c => searchArgs.CategoryId == c.TodoItemCategoryId))
+                    || i.CategorySet.Any(c => searchArgs.CategoryId == c.TodoItemCategoryId))
                 
                 && (searchArgs.IsInUserFavorites == null || i.IsUserFavorite == searchArgs.IsInUserFavorites)
                 
@@ -87,7 +87,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         {
             var categories = m_dataRepo.TodoItemCategories.FindAll(c => 
                 (searchArgs.TodoItemId == null 
-                    || c.TodoCollection.Any(i => searchArgs.TodoItemId == i.TodoItemId))
+                    || c.TodoItemSet.Any(i => searchArgs.TodoItemId == i.TodoItemId))
                 
                 && (searchArgs.StringFieldsContains == null || c.Title.Contains(searchArgs.StringFieldsContains)
                                                             || c.Description.Contains(searchArgs.StringFieldsContains))

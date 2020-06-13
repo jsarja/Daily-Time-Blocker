@@ -48,8 +48,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreInsertion
             var category = m_dataRepo.TodoItemCategories
                 .Find(c => c.TodoItemCategoryId == categoryId);
             
-            item.Categories.Add(category);
-            category.TodoCollection.Add(item);
+            item.CategorySet.Add(category);
+            category.TodoItemSet.Add(item);
             return Task.CompletedTask;
         }
     }

@@ -95,7 +95,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
         {
             var results = await m_dbContext.TodoItemCategories.Where(c => 
                 (searchArgs.TodoItemId == null 
-                 || c.TodoCollection.Any(i => searchArgs.TodoItemId == i.TodoItemId))
+                 || c.TodoItemSet.Any(i => searchArgs.TodoItemId == i.TodoItemId))
                 
                 && (searchArgs.StringFieldsContains == null || c.Title.Contains(searchArgs.StringFieldsContains)
                                                             || c.Description.Contains(searchArgs.StringFieldsContains))

@@ -7,11 +7,11 @@ namespace Planner.Domain.Entities
     {
         public TodoItemCategory()
         {
-            TodoCollection = new List<TodoItem>();
+            TodoItemSet = new HashSet<TodoItem>();
         }
         public int TodoItemCategoryId { get; set; }
         
-        public ICollection<TodoItem> TodoCollection { get; }
+        public ICollection<TodoItem> TodoItemSet { get; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int OwnerId { get; set; }

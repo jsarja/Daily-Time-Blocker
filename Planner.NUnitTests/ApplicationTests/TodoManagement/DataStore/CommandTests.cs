@@ -23,7 +23,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         public async Task TestTodoItemInsertion()
         {
             var todoItem1 = BasicTodoData.TodoItems[0];
-            todoItem1.Categories.Clear();
+            todoItem1.CategorySet.Clear();
             await m_insertionClient.TodoItemInsertionAsync(todoItem1);
             var success = await m_insertionClient.CommitAsync(new CancellationToken());
             
@@ -32,7 +32,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             Assert.That(result1, Is.Not.Null);
             
             var todoItem2 = BasicTodoData.TodoItems[1];
-            todoItem2.Categories.Clear();
+            todoItem2.CategorySet.Clear();
             await m_insertionClient.TodoItemInsertionAsync(todoItem2);
             success = await m_insertionClient.CommitAsync(new CancellationToken());
             
@@ -89,7 +89,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         public async Task TestTodoItemCategoryInsertion()
         {
             var todoItemCategory1 = BasicTodoData.TodoItemCategories[0];
-            todoItemCategory1.TodoCollection.Clear();
+            todoItemCategory1.TodoItemSet.Clear();
             await m_insertionClient.TodoItemCategoryInsertionAsync(todoItemCategory1);
             var success = await m_insertionClient.CommitAsync(new CancellationToken());
             
@@ -98,7 +98,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             Assert.That(result1, Is.Not.Null);
             
             var todoItemCategory2 = BasicTodoData.TodoItemCategories[1];
-            todoItemCategory2.TodoCollection.Clear();
+            todoItemCategory2.TodoItemSet.Clear();
             await m_insertionClient.TodoItemCategoryInsertionAsync(todoItemCategory2);
             success = await m_insertionClient.CommitAsync(new CancellationToken());
             
@@ -115,12 +115,12 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             var success = await m_insertionClient.CommitAsync(new CancellationToken());
             
             Assert.That(success, Is.True);
-            var resultItem = (await m_queryClient.TodoItemQueryAsync(1)).Categories.ToList();
+            var resultItem = (await m_queryClient.TodoItemQueryAsync(1)).CategorySet.ToList();
             Assert.That(resultItem, Has.Count.EqualTo(1));
             Assert.That(resultItem.First().TodoItemCategoryId, Is.EqualTo(1));
 
             var resultCategory = (await m_queryClient.TodoItemCategoryQueryAsync(1))
-                .TodoCollection.ToList();
+                .TodoItemSet.ToList();
             Assert.That(resultCategory, Has.Count.EqualTo(1));
             Assert.That(resultCategory.First().TodoItemId, Is.EqualTo(1));
             
@@ -128,7 +128,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             success = await m_insertionClient.CommitAsync(new CancellationToken());
             
             Assert.That(success, Is.True);
-            resultCategory = (await m_queryClient.TodoItemCategoryQueryAsync(1)).TodoCollection.ToList();
+            resultCategory = (await m_queryClient.TodoItemCategoryQueryAsync(1)).TodoItemSet.ToList();
             Assert.That(resultCategory, Has.Count.EqualTo(2));
         }
         
@@ -241,7 +241,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             Assert.That(result2, Is.Null);
             
             var item = await m_queryClient.TodoItemCategoryQueryAsync(1);
-            Assert.That(item.TodoCollection.All(x => x.TodoItemId != 2));
+            Assert.That(item.TodoItemSet.All(x => x.TodoItemId != 2));
             
             // Test deleting non existing.
             Assert.That(async () => await m_deletionClient.TodoItemDeletionAsync(9), Throws.Nothing);
@@ -301,7 +301,7 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
             Assert.That(result2, Is.Null);
             
             var item = await m_queryClient.TodoItemQueryAsync(1);
-            Assert.That(item.Categories.All(x => x.TodoItemCategoryId != 1));
+            Assert.That(item.CategorySet.All(x => x.TodoItemCategoryId != 1));
             
             // Test deleting non existing.
             Assert.That(async () => await m_deletionClient.TodoItemCategoryDeletionAsync(9), Throws.Nothing);
