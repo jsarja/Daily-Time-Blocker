@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Planner.Application.Common.Interfaces;
 using Planner.Application.TodoManagement.DataStore.Core;
 
@@ -18,6 +20,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreDeletion
             {
                 m_dbContext.TodoItems.Remove(todoItem);
             }
+
+            await m_dbContext.TodoItemCategories.ForEachAsync(t => t.TodoItemSet.Remove(todoItem));
         }
 
         public async Task DailyTodoItemDeletionAsync(int id)
@@ -48,6 +52,8 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreDeletion
             {
                 m_dbContext.TodoItemCategories.Remove(category);
             }
+
+            await m_dbContext.TodoItems.ForEachAsync(t => t.CategorySet.Remove(category));
         }
     }
 }

@@ -18,48 +18,26 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public async Task<TodoItem> TodoItemQueryAsync(int id)
         {
-            var item = await m_dbContext.TodoItems.FindAsync(id);
-            
-            if (item == null)
-            {
-                return null;
-            }
-            
-            item.CategorySet.Clear();
-            
-            var categoryIdList = await m_dbContext.TodoItemCategoryJoin
-                .Where(j => j.TodoItemId == id)
-                .Select(j => j.CategoryId)
-                .ToListAsync();
-
-            var categories = await m_dbContext.TodoItemCategories.Where(i =>
-                categoryIdList.Contains(i.TodoItemCategoryId)).ToListAsync();
-            
-            foreach (var category in categories)
-            {
-                item.CategorySet.Add(category);
-            }
-
-            return item;
+            return await m_dbContext.TodoItems.FindAsync(id);
         }
 
         public async Task<IEnumerable<TodoItem>> TodoItemsQueryAsync(TodoItemsSearchArgs searchArgs)
         {
             var _ = searchArgs != null ? "" : throw new ArgumentNullException();
 
-            var results = await m_dbContext.TodoItems.Where(i =>
-                (searchArgs.CategoryId == null || m_dbContext.TodoItemCategoryJoin
-                     .Any(j => j.CategoryId == searchArgs.CategoryId 
-                               && j.TodoItemId == i.TodoItemId))
-
-                && (searchArgs.IsInUserFavorites == null || i.IsUserFavorite == searchArgs.IsInUserFavorites)
+            var results = await m_dbContext.TodoItems.Where(i => 
+                (searchArgs.IsInUserFavorites == null || i.IsUserFavorite == searchArgs.IsInUserFavorites)
                 
                 && (searchArgs.StringFieldsContains == null || i.Title.Contains(searchArgs.StringFieldsContains)
                                                             || i.Description.Contains(searchArgs.StringFieldsContains))
             ).ToListAsync();
-            
-            // TODO map categories.
-            
+
+            if (searchArgs.CategoryId != null)
+            {
+                results = results.Where(i => 
+                    i.CategorySet.Any(c => c.TodoItemCategoryId == searchArgs.CategoryId)).ToList();
+            }
+
             return results;
         }
 
@@ -106,29 +84,7 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
 
         public async Task<TodoItemCategory> TodoItemCategoryQueryAsync(int id)
         {
-            var category = await m_dbContext.TodoItemCategories.FindAsync(id);
-            
-            if (category == null)
-            {
-                return null;
-            }
-            
-            category.TodoItemSet.Clear();
-            
-            var itemIdList = await m_dbContext.TodoItemCategoryJoin
-                .Where(j => j.CategoryId == id)
-                .Select(j => j.TodoItemId)
-                .ToListAsync();
-
-            var items = await m_dbContext.TodoItems.Where(i =>
-                itemIdList.Contains(i.TodoItemId)).ToListAsync();
-            
-            foreach (var item in items)
-            {
-                category.TodoItemSet.Add(item);
-            }
-            
-            return category;
+            return await m_dbContext.TodoItemCategories.FindAsync(id);
         }
 
         public async Task<IEnumerable<TodoItemCategory>> 
@@ -137,14 +93,16 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreQuery
             var _ = searchArgs != null ? "" : throw new ArgumentNullException();
             
             var results = await m_dbContext.TodoItemCategories.Where(c => 
-                (searchArgs.TodoItemId == null 
-                 || c.TodoItemSet.Any(i => searchArgs.TodoItemId == i.TodoItemId))
-                
-                && (searchArgs.StringFieldsContains == null || c.Title.Contains(searchArgs.StringFieldsContains)
-                                                            || c.Description.Contains(searchArgs.StringFieldsContains))
+                (searchArgs.StringFieldsContains == null || c.Title.Contains(searchArgs.StringFieldsContains)
+                                                         || c.Description.Contains(searchArgs.StringFieldsContains))
             ).ToListAsync();
 
-            // TODO map todoItems.
+            if (searchArgs.TodoItemId != null)
+            {
+                results = results.Where(c => c.TodoItemSet.Any(
+                    i => searchArgs.TodoItemId == i.TodoItemId)).ToList();
+            }
+            
             return results;
         }
     }

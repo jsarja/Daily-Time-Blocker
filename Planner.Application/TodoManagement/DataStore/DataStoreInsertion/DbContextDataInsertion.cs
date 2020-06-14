@@ -1,4 +1,6 @@
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Planner.Application.Common.Interfaces;
 using Planner.Application.Common.Models;
 using Planner.Application.TodoManagement.DataStore.Core;
@@ -46,13 +48,19 @@ namespace Planner.Application.TodoManagement.DataStore.DataStoreInsertion
                 return;
             }
             
-            var join = new TodoItemCategoryJoinTable
-            {
-                TodoItem = item,
-                Category = category,
-            };
+            item.CategorySet.Add(category);
+            category.TodoItemSet.Add(item);
             
-            await m_dbContext.TodoItemCategoryJoin.AddAsync(join);
+            m_dbContext.Entry(item).State = EntityState.Modified;
+            m_dbContext.Entry(category).State = EntityState.Modified;
+
+            // var join = new TodoItemCategoryJoinTable
+            // {
+            //     TodoItem = item,
+            //     Category = category,
+            // };
+            //
+            // await m_dbContext.TodoItemCategoryJoin.AddAsync(join);
         }
     }
 }
