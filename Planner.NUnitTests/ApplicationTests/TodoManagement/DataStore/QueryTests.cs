@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Planner.Application.TodoManagement.DataStore.DataStoreQuery;
 using Planner.Application.TodoManagement.TodoActions.ReadActions;
-using Planner.NUnitTests.TestData;
 
 namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
 {
@@ -282,6 +281,86 @@ namespace Planner.NUnitTests.ApplicationTests.TodoManagement.DataStore
         public void TestDailyTodoItemBlockQueryWithNullArgs()
         {
             Assert.That(async () => await m_queryClient.DailyTodoItemBlocksQueryAsync(null),
+                Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public async Task TestTodoItemCategoryQueryWithId()
+        {
+            var category1 = await m_queryClient.TodoItemCategoryQueryAsync(1);
+            Assert.That(category1, Is.Not.Null);
+
+            var propertyValues = (category1.Title, category1.Description, category1.OwnerId,
+                category1.TodoItemSet.Count);
+            var expectedPropertyValues = ("Category 1", "This a category number 1.", 1, 2);
+            Assert.That(propertyValues, Is.EqualTo(expectedPropertyValues));
+
+            for (var i = 2; i < 3; i++)
+            {
+                var category = await m_queryClient.TodoItemCategoryQueryAsync(i);
+                Assert.That(category, Is.Not.Null);
+            }
+        }
+        
+        [Test]
+        public async Task TestTodoItemCategoryQueryWithItemId()
+        {
+            var categories =
+                (await m_queryClient.TodoItemCategoriesQueryAsync(new TodoItemCategoriesSearchArgs
+                {
+                    TodoItemId = 1
+                })).ToList();
+            Assert.That(categories, Has.Count.EqualTo(1));
+            Assert.That(categories.First().TodoItemCategoryId, Is.EqualTo(1));
+
+            categories =
+                (await m_queryClient.TodoItemCategoriesQueryAsync(new TodoItemCategoriesSearchArgs
+                {
+                    TodoItemId = 4
+                })).ToList();
+            Assert.That(categories, Has.Count.EqualTo(1));
+            Assert.That(categories.First().TodoItemCategoryId, Is.EqualTo(2));
+        }
+        
+        [Test]
+        public async Task TestTodoItemCategoryQueryWithTextSearch()
+        {
+            var categories = 
+                (await m_queryClient.TodoItemCategoriesQueryAsync(new TodoItemCategoriesSearchArgs
+                {
+                    StringFieldsContains = "number 1"
+                })).ToList();
+            Assert.That(categories, Has.Count.EqualTo(1));
+            Assert.That(categories.First().TodoItemCategoryId, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task TestTodoItemCategoryQueryWithoutArgs()
+        {
+            var categories = await m_queryClient.TodoItemCategoriesQueryAsync(
+                new TodoItemCategoriesSearchArgs());
+            Assert.That(categories, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public async Task TestTodoItemCategoryQueryWithNoResults()
+        {
+            var category1 = await m_queryClient.TodoItemCategoryQueryAsync(9);
+            Assert.That(category1, Is.Null);
+            
+            var categories = await m_queryClient.TodoItemCategoriesQueryAsync(
+                new TodoItemCategoriesSearchArgs {TodoItemId = 9});
+            Assert.That(categories, Has.Count.EqualTo(0));
+            
+            categories = await m_queryClient.TodoItemCategoriesQueryAsync(
+                new TodoItemCategoriesSearchArgs{ StringFieldsContains = "Not in data" });
+            Assert.That(categories, Has.Count.EqualTo(0));
+        }
+        
+        [Test]
+        public void TestTodoItemCategoryQueryWithNullArgs()
+        {
+            Assert.That(async () => await m_queryClient.TodoItemCategoriesQueryAsync(null),
                 Throws.ArgumentNullException);
         }
     }
