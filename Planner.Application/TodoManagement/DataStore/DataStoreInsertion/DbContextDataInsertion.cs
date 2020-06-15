@@ -1,8 +1,6 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Planner.Application.Common.Interfaces;
-using Planner.Application.Common.Models;
 using Planner.Application.TodoManagement.DataStore.Core;
 using Planner.Domain.Entities;
 
