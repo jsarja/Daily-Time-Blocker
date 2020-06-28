@@ -6,7 +6,7 @@ namespace Planner.Domain.Entities
     {
         public TodoItem()
         {
-            Categories = new List<TodoItemCategory>();
+            CategorySet = new HashSet<TodoItemCategory>();
         }
         public int TodoItemId { get; set; }
         
@@ -15,6 +15,6 @@ namespace Planner.Domain.Entities
         public string Description { get; set; }
         public bool IsUserFavorite { get; set; }
         
-        public ICollection<TodoItemCategory> Categories { get; }
+        public ICollection<TodoItemCategory> CategorySet { get; }
     }
 }

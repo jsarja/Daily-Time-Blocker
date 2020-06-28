@@ -17,7 +17,7 @@ namespace Planner.Infrastructure.Data.EntityFramework.Configurations
             builder.HasOne<TodoItemCategory>().WithMany().HasForeignKey(jt => jt.CategoryId);
 
             
-            builder.Ignore(jt => jt.Item);
+            builder.Ignore(jt => jt.TodoItem);
             builder.Ignore(jt => jt.Category);
         }
     }
