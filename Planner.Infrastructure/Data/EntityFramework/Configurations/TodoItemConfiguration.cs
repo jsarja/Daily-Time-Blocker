@@ -16,7 +16,7 @@ namespace Planner.Infrastructure.Data.EntityFramework.Configurations
             builder.Property(t=> t.IsUserFavorite).IsRequired();
             
             // Ignore collection reference.
-            builder.Ignore(t => t.Categories);
+            builder.Ignore(t => t.CategorySet);
         }
     }
 }
