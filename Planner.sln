@@ -6,10 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.Application", "Plan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.Infrastructure", "Planner.Infrastructure\Planner.Infrastructure.csproj", "{FB3BF9B7-C58D-4B2B-B892-F3FE72118D23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.WebAPI", "Planner.WebAPI\Planner.WebAPI.csproj", "{D472A9A8-D181-4409-BC88-47332222DA33}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.BlazorServer", "Planner.BlazorServer\Planner.BlazorServer.csproj", "{D04A18C8-1B45-41B2-8C17-F790D28623B7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planner.NUnitTests", "Planner.NUnitTests\Planner.NUnitTests.csproj", "{ED4F6DEC-2D0D-4B54-8BDE-82D7470B8287}"
 EndProject
 Global
